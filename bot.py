@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import ReplyKeyboardMarkup
 import logging
+from config import TELEGRAM_TOKEN
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -11,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 def start(bot, update):
-    update.message.reply_text('Hi!')
+    keyboard = ReplyKeyboardMarkup([['Adresse erstellen']])
+    update.message.reply_text('Hi!', reply_markup=keyboard)
 
 
 def reply(bot, update):
@@ -19,6 +22,8 @@ def reply(bot, update):
 
 
 def main():
+    updater = Updater(TELEGRAM_TOKEN)
+    dp = updater.dispatcher
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler(Filters.text, reply))
 
@@ -27,4 +32,4 @@ def main():
 
 
 if __name__ == '__main__':
-main()
+    main()
