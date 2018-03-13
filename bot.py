@@ -5,6 +5,9 @@ from telegram import ReplyKeyboardMarkup, ForceReply
 import logging
 from config import TELEGRAM_TOKEN
 import re
+import subprocess
+import random
+import string
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -29,10 +32,19 @@ def reply(bot, update):
 
 
 def create_qmail(update):
-    mail = update.message.text.lower()
-    if not re.match(r'^[a-z0-9.-]*$', mail):
+    mail = update.message.text.lower().replace('.', ':')
+    if not re.match(r'^[a-z0-9:-]*$', mail):
         update.message.reply_text('Keine valide E-Mail Adresse.')
         return
+    passw = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(12))
+    try:
+        p1 = subprocess.Popen('printf {}'.format(passw).split(), stdout=subprocess.PIPE)
+        output = subprocess.check_output('vadduser {}'.format(mail).split(), stdin=p1.stdout)
+        if output.decode() not in "vadduser: user '{}' successfully added\n".format(mail):
+            raise subprocess.CalledProcessError
+        update.message.reply_text('Benutzer {} erfolgreich erstellt.'.format(mail))
+    except subprocess.CalledProcessError:
+        update.message.reply_text('Benutzer {} konnte nicht erstellt werden'.format(mail))
 
 
 def read_msg(bot, update):
