@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def start(bot, update):
-    keyboard = ReplyKeyboardMarkup([[CREATE]])
+    keyboard = ReplyKeyboardMarkup([[CREATE]], resize_keyboard=True)
     update.message.reply_text('Hi!', reply_markup=keyboard)
 
 
