@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, RegexHandler
-from telegram import ReplyKeyboardMarkup, ForceReply, ParseMode
-import logging
-from config import TELEGRAM_TOKEN, WEBMAIL, SERVER, ADDRESSES
-from strings import MESSAGE, CREATE, MAIL_NAME
 import re
 import subprocess
 import random
 import string
+import logging
+
+from telegram import ReplyKeyboardMarkup, ForceReply, ParseMode
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, RegexHandler
+
+from config import TELEGRAM_TOKEN, WEBMAIL, SERVER, ADDRESSES, USERS 
+from strings import MESSAGE, CREATE, MAIL_NAME
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -56,6 +58,9 @@ def create_qmail(update):
 
 
 def read_msg(bot, update):
+    if update.message.from_user.id not in USERS:
+        update.message.reply_text('Nicht erlaubt.')
+        return
     if update.message.reply_to_message:
         if update.message.reply_to_message.text in [MAIL_NAME]:
             create_qmail(update)
