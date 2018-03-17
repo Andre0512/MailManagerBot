@@ -1,5 +1,8 @@
-CREATE='Adresse erstellen'
+CREATE = 'Adresse erstellen'
+FORBIDDEN = 'Nicht erlaubt.'
+INVALID = 'Keine valide E-Mail Adresse.'
 MAIL_NAME = 'Welche Adresse soll angelegt werden?'
+ERROR = 'Benutzer {} konnte nicht erstellt werden'
 MESSAGE="""*Erstellte Adressen:*
 {ADDRESSES}
 
